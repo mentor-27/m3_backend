@@ -1,7 +1,6 @@
 const fs = require('fs/promises');
 const path = require('path');
-const chalk = require('chalk')
-const { epilog } = require('yargs');
+const chalk = require('chalk');
 
 const notesPath = path.join(__dirname, 'db.json');
 
@@ -10,13 +9,23 @@ async function addNote(title) {
 
   const note = {
     id: Date.now().toString(),
-    title
-  }
+    title,
+  };
 
   notes.push(note);
 
   await fs.writeFile(notesPath, JSON.stringify(notes));
-  console.log(chalk.bgGreen(' Note added '));
+  console.log(chalk.white.bgGreen(' Note added '));
+}
+
+async function editNote(noteId, newTitle) {
+  const notes = await getNotes();
+  const pos = notes.findIndex(({ id }) => noteId === id);
+
+  notes[pos].title = newTitle;
+
+  await fs.writeFile(notesPath, JSON.stringify(notes));
+  console.log(chalk.white.bgBlue(' Note edited '));
 }
 
 async function getNotes() {
@@ -28,10 +37,11 @@ async function printNotes() {
   const notes = await getNotes();
   if (!notes.length) console.log(chalk.yellow('List is empty'));
   else {
-    console.log(chalk.bgBlue('Notes list:'));
+    console.log(chalk.bold.black.bgBlue(' Notes list: '));
     notes.forEach(note => {
       console.log(chalk.cyan(note.id), chalk.greenBright(note.title));
-    })}
+    });
+  }
 }
 
 async function removeNote(noteId) {
@@ -40,11 +50,13 @@ async function removeNote(noteId) {
   notes = notes.filter(({ id }) => noteId !== id);
 
   await fs.writeFile(notesPath, JSON.stringify(notes));
-  console.log(chalk.bgYellow(' Note removed '));
+  console.log(chalk.black.bgYellow(' Note removed '));
 }
 
 module.exports = {
+  getNotes,
   addNote,
+  removeNote,
+  editNote,
   printNotes,
-  removeNote
 };

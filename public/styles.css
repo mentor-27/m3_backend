@@ -1,0 +1,13 @@
+.note-title {
+  width: fit-content;
+  max-width: 256px;
+  outline: none;
+  word-wrap: normal;
+  overflow: hidden;
+}
+
+.note-title:read-write {
+  padding: 2px 4px;
+  border: 1px solid #777;
+  border-radius: 4px;
+}

@@ -37,7 +37,7 @@ async function printNotes() {
   const notes = await getNotes();
   if (!notes.length) console.log(chalk.yellow('List is empty'));
   else {
-    console.log(chalk.bold.black.bgBlue(' Notes list: '));
+    console.log(chalk.black.bgBlue(' Notes list: '));
     notes.forEach(note => {
       console.log(chalk.cyan(note.id), chalk.greenBright(note.title));
     });
@@ -50,13 +50,12 @@ async function removeNote(noteId) {
   notes = notes.filter(({ id }) => noteId !== id);
 
   await fs.writeFile(notesPath, JSON.stringify(notes));
-  console.log(chalk.black.bgYellow(' Note removed '));
+  console.log(chalk.white.bgYellow(' Note removed '));
 }
 
 module.exports = {
-  getNotes,
   addNote,
+  getNotes,
   removeNote,
   editNote,
-  printNotes,
 };
